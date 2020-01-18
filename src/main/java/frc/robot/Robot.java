@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.DriveTrain;
+import option16.util.*;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,8 +23,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
-
+  public static RobotContainer m_robotContainer;
+  public DriveTrain drive;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -31,6 +34,13 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+  //  PurePursuitHandler.addPoint(new Point(0, 0));
+   // PurePursuitHandler.addPoint(new Point(0, 3));
+    //PurePursuitHandler.clearPath();
+    //PurePursuitHandler.addPoint(new Point(0,0));
+    //PurePursuitHandler.addPoint(new Point(0,-3));
+    PurePursuitHandler.addPoint(new Point(0,0));
+    PurePursuitHandler.addPoint(new Point(0,3));
   }
 
   /**
@@ -47,6 +57,10 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    double distance = RobotContainer.drive.getDistance();
+    double angle = RobotContainer.drive.getAngle();
+    double [] velocities = PurePursuitHandler.getNextVelocities(new Odometry(distance * Math.cos(Math.toRadians(angle)), distance * Math.sin(Math.toRadians(angle)), angle));
+    RobotContainer.drive.tankDrive(velocities[0], velocities[1]);
   }
 
   /**

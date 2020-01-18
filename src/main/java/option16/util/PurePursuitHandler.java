@@ -32,6 +32,8 @@ public class PurePursuitHandler {
             finished = true;
         double curvature = calculateCurvature(robotAngle, robotPosition, lookaheadPoint);
         double[] velocities = getTargetVelocities(curvature, (float) Constants.maxVelocity, (float) Constants.wheelBaseWidth);
+        velocities[0] = Units.feetToTicks(velocities[0] / 10);
+        velocities[1] = Units.feetToTicks(velocities[1] / 10);
         return velocities;
     }
 
@@ -188,6 +190,10 @@ public class PurePursuitHandler {
         return path;
     }
 
+    /**
+     * Clears the current path, replaces it with a new ArrayList of points
+     */
+    public static void clearPath() {path = new ArrayList<Point>(); }
     /**
      * Gets the lookahead distance.
      *
